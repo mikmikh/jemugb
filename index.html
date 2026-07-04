@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MikhGB</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+  </head>
+  <body>
+    <div class="main">
+      <div class="row">
+        <button class="start">Reset</button>
+        <button class="stop hidden">Stop</button>
+        <button class="save hidden">Save</button>
+        <button class="load hidden">Load</button>
+        <button class="clear hidden">Clear</button>
+        <button class="speed">Speed</button>
+        <label class="control">boot
+          <input type="checkbox" checked class="boot-rom-checkbox" />
+        </label>
+        <label class="control">rom file
+          <input type="file" class="file-input" />
+        </label>
+      </div>
+      <canvas class="canvas" height="300" width="300"></canvas>
+      <!-- <canvas class="canvas2" height="300" width="300"></canvas> -->
+
+      <div class="row">
+        <div class="dpad">
+          <div class="row">
+            <button class="control control-up">up</button>
+          </div>
+          <div class="row">
+            <button class="control control-left">left</button>
+            <button class="control control-blank"></button>
+            <button class="control control-right">right</button>
+          </div>
+          <div class="row">
+            <button class="control control-down">down</button>
+          </div>
+        </div>
+        <div class="ab">
+          <button class="control control-a">A</button>
+          <button class="control control-b">B</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <button class="control control-start">start</button>
+        <button class="control control-select">select</button>
+      </div>
+    </div>
+
+    <!-- <p>wasd=dpad</p>
+    <p>q/e=Start/Select</p>
+    <p>zx=B/A</p> -->
+    <script type="module" src="src/main_run.js"></script>
+  </body>
+</html>

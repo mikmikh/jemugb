@@ -1,0 +1,86 @@
+import { NotImplementedError } from "./errors/not-implemented.error.js";
+import { CB_OPCODE_TO_INS, OPCODE_TO_INS } from "./instructions/all_ins.js";
+import { toHexStr } from "./utils/bit_utils.js";
+import { getHeaderInfo } from "./utils/header_utils.js";
+
+const registers = {
+  A: 0x00, // Accumulator
+  F: 0x00, // Flags 4c 5h 6n 7z
+  B: 0x00,
+  C: 0x00,
+  D: 0x00,
+  E: 0x00,
+  H: 0x00,
+  L: 0x00,
+  SP: 0x0000, // Stack Pointer
+  PC: 0x0000, // Program Counter/Pointer
+};
+
+
+export class Engine {
+  constructor() {
+    this.registers = {...registers};
+    this.memory = new Memory();
+    this.halt = this.halt_.bind(this);
+    this.disableInterrupts = this.disableInterrupts_.bind(this);
+    this.enableInterrupts = this.enableInterrupts_.bind(this);
+    this.headerInfo = null;
+    this.running = false;
+  }
+  async loadRom(romPath='/static/tetris.gb') {
+    const romResp = await fetch(romPath);
+    const romArrayBuffer = await romResp.arrayBuffer();
+    const rom = new Uint8Array(romArrayBuffer);
+    console.log(rom);
+    this.memory.setRom(rom);
+    console.log(this.memory);
+    this.headerInfo = getHeaderInfo(this.memory.data);
+    console.log("ROM:",this.headerInfo);
+  }
+  _step() {
+    const log = [];
+    log.push(`[pc:${this.registers.PC}]`);
+    let opcode = this.memory.rd(this.registers.PC++);
+    log.push(toHexStr(opcode));
+    let isPrefixedInstruction = opcode === 0xCB;
+    let opcodeInstructionMap = OPCODE_TO_INS;
+    if (isPrefixedInstruction) {
+      opcode = this.memory.rd(this.registers.PC++);
+      opcodeInstructionMap = CB_OPCODE_TO_INS;
+      log.push(toHexStr(opcode));
+    }
+    if (!(opcode in opcodeInstructionMap)) {
+      throw new NotImplementedError(`${toHexStr(opcode)}`);
+    }
+    const handler = opcodeInstructionMap[opcode];
+    log.push(handler.name);
+    console.log(log.join(':'));
+    handler(opcode, this);
+  }
+  run() {
+    this.running = true;
+    for (let i = 0; i < 1000; i++) {
+      if (!this.running) {
+        break;
+      }
+      this._step();
+    }
+  }
+  halt_() {
+    // stop CPU untill next Interrupt (some i: IE[i]=1 && IF[i]=1)
+    // IME handles interrupts, not related to condition of resuming halt state
+    this.running = false;
+    this.is_halt = true;
+    throw new NotImplementedError('halt');
+  }
+  disableInterrupts_() {
+    // 
+    throw new NotImplementedError('disableInterrupts');
+  }
+  enableInterrupts_() {
+    throw new NotImplementedError('enableInterrupts');
+  }
+
+}
+
+

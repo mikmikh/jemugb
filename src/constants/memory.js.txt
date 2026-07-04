@@ -1,0 +1,98 @@
+// Interrupt Enable Register
+// --------------------------- FFFF
+// Internal RAM
+// --------------------------- FF80
+// Empty but unusable for I/O
+// --------------------------- FF4C
+// I/O ports
+// --------------------------- FF00
+// Empty but unusable for I/O
+// --------------------------- FEA0
+// Sprite Attrib Memory (OAM)
+// --------------------------- FE00
+// Echo of 8kB Internal RAM
+// --------------------------- E000
+// 8kB Internal RAM
+// --------------------------- C000
+// 8kB switchable RAM bank          (inside Cartridge)
+// --------------------------- A000
+// 8kB Video RAM
+// --------------------------- 8000 --
+// 16kB switchable ROM bank |
+// --------------------------- 4000 |= 32kB Cartrigbe
+// 16kB ROM bank #0 |
+// --------------------------- 0000 --
+// * NOTE: b = bit, B = byte
+
+export const HARDWARE_REGISTERS = {
+  M_P1: 0xff00,
+  M_DIV: 0xff04,
+  M_TIMA: 0xff05,
+  M_TMA: 0xff06,
+  M_TAC: 0xff07,
+  M_IF: 0xff0f,
+  M_LCDC: 0xff40,
+  M_STAT: 0xff41,
+  M_SCY: 0xff42,
+  M_SCX: 0xff43,
+  M_LY: 0xff44,
+  M_FMA: 0xff46,
+  M_BGP: 0xff47,
+  M_OBP0: 0xff48,
+  M_OBP1: 0xff49,
+  M_WY: 0xff4a,
+  M_WX: 0xff4b,
+  M_IE: 0xffff,
+};
+
+export const MEMORY_RANGES = {
+  BOOT_ROM_START: 0x0000,
+  BOOT_ROM_END: 0x00FF,
+  ROM_BANK_0_START: 0x0000,
+  ROM_BANK_0_END: 0x3FFF,
+  CARTRIDGE_HEADER_AREA_START: 0x0100,
+  CARTRIDGE_HEADER_AREA_END: 0x014F,
+  ROM_BANK_N_START: 0x4000,
+  ROM_BANK_N_END: 0x7FFF,
+  // VRAM
+  VRAM_START: 0x8000,
+  VRAM_END: 0x9FFF,
+  TILE_RAM_START: 0x8000, // 1) 0x8000-0x8FFF
+  TILE_RAM_END: 0x97FF,
+  BACKGROUND_MAP_START: 0x9800,
+  BACKGROUND_MAP_END: 0x9FFF,
+  // /VRAM
+  CARTRIDGE_RAM_START: 0xA000,
+  CARTRIDGE_RAM_END: 0xBFFF,
+  WORKING_RAM_START: 0xC000,
+  WORKING_RAM_END: 0xDFFF,
+  ECHO_RAM_START: 0xE000, // echo ram is mapped to working ram
+  ECHO_RAM_END: 0xFDFF,
+  OBJECT_ATRIBUTE_MEMORY_START: 0xFE00,
+  OBJECT_ATRIBUTE_MEMORY_END: 0xFE9F,
+  UNUSED_START: 0xFEA0,
+  UNUSED_END: 0xFEFF,
+  IO_REGISTERS_START: 0xFF00,
+  IO_REGISTERS_END: 0xFF7F,
+  HIGH_RAM_AREA_START: 0xFF80,
+  HIGH_RAM_AREA_END: 0xFFFE,
+  INTERRUPT_ENABLED_REGISTER: 0xFFFF,
+};
+
+// TILE MAP
+// 1st tile set 0x8000-0x8FFF (4096)
+// each tile 16 bytes (row 2 bytes) (total 256 tiles)
+// 1st tile set:
+// 1 part: 0x8000-0x87FF
+// 2 part: 0x8800-0x8FFF
+// 2nd tile set:
+// 1 part: 0x8800-0x8FFF
+// 2 part: 0x9000-0x97FF
+// colors: b,d,l,w
+// 0b00,0b10,0b01,0b00
+// 8x8 pixel tile
+//       76543210
+//0x8000 10110101
+//0x8001 01100101
+//       dlwdbwbw
+// each row of tile 2 bytes,

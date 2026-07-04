@@ -1,0 +1,3 @@
+- display window
+- emulate scanline
+- interrupts

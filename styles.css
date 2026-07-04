@@ -1,0 +1,62 @@
+html,body {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.canvas {
+  image-rendering: pixelated;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: black;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background-color: #8849bc;
+  /* #8849bc; */
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.dpad {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ab {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  gap: 0.5rem;
+}
+.control {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+.control-a {
+  margin-left: 2rem;
+}
+.control-b {
+  margin-right: 2rem;
+}
+.hidden {
+  display: none;
+}
